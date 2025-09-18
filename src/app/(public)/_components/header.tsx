@@ -18,7 +18,7 @@ import { LogIn, Menu } from "lucide-react";
 export function Header (){
     const [isOpen, setIsOpen] = useState(false)
 
-    const session = true;
+    const session = null;
 
     const navItems = [
         { href: "#profissionais", label: "Profissionais" }
