@@ -20,6 +20,8 @@ npm install prisma --save-dev
 npx prisma init
 npm install @prisma/client
 npx prisma generate
+npx prisma format(opcional, serve para formatar o 'schema.prisma')
+npx prisma migrate dev(obrigatório após alguma alteração no 'schema.prisa')
 
 npm install next-auth@beta
 npx auth secret(gera uma senha, no '.env.local', e pode ser gerada varias vezes)
