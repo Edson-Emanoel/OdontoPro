@@ -8,6 +8,11 @@ import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, ArrowRight, Banknote, CalendarCheck2, CircleUserIcon, Folder, List } from "lucide-react"
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -38,10 +43,6 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }){
                             quality={100}
                             src={logoImg}
                             alt="Logo do OdontoPro"
-                            style={{
-                                width: "auto",
-                                height: "auto"
-                            }}
                         />
                     )}
                 </div>
@@ -50,13 +51,93 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }){
                     className="bg-gray-100 hover:bg-gray-50 text-zinc-900 self-end mb-2"
                     onClick={() => setIsCollapsed(!isCollapsed)}
                 >
-                    {!isCollapsed ? (
-                        <ArrowLeft className="w-12 h-12" />
-                    ) : (
-                        <ArrowRight className="w-12 h-12" />
-                    )}
+                    {!isCollapsed ? ( <ArrowLeft className="w-12 h-12" /> ) : ( <ArrowRight className="w-12 h-12" /> )}
                 </Button>
 
+                
+                {/* Mostra os ícones quando a sidebar está recolhida */}
+                {isCollapsed && (
+                    <nav className="flex flex-col gap-1 overflow-hidden mt-3">
+                        <SidebarLink
+                            href="/dashboard"
+                            label="Agendamentos"
+                            pathname={pathname}
+                            isCollapsed={isCollapsed}
+                            icon={<CalendarCheck2 className="w-6 h-6" />}
+                        />
+
+                        <SidebarLink
+                            href="/dashboard/services"
+                            label="Serviços"
+                            pathname={pathname}
+                            isCollapsed={isCollapsed}
+                            icon={<Folder className="w-6 h-6" />}
+                        />
+
+                        <SidebarLink
+                            href="/dashboard/profile"
+                            label="Meu Perfil"
+                            pathname={pathname}
+                            isCollapsed={isCollapsed}
+                            icon={<CircleUserIcon className="w-6 h-6" />}
+                        />
+
+                        <SidebarLink
+                            href="/dashboard/plans"
+                            label="Planos"
+                            pathname={pathname}
+                            isCollapsed={isCollapsed}
+                            icon={<Banknote />}
+                        />
+                    </nav>
+                )}
+
+
+                <Collapsible open={!isCollapsed}>
+                    <CollapsibleContent>
+                        <nav className="flex flex-col gap-1 overflow-hidden">
+                            <span className="text-sm text-gray-400 font-medium mt-1 uppercase">
+                                Painel
+                            </span>
+                            
+                            <SidebarLink
+                                href="/dashboard"
+                                label="Agendamentos"
+                                pathname={pathname}
+                                isCollapsed={isCollapsed}
+                                icon={<CalendarCheck2 className="w-6 h-6" />}
+                            />
+
+                            <SidebarLink
+                                href="/dashboard/services"
+                                label="Serviços"
+                                pathname={pathname}
+                                isCollapsed={isCollapsed}
+                                icon={<Folder className="w-6 h-6" />}
+                            />
+
+                            <span className="text-sm text-gray-400 font-medium mt-1 uppercase">
+                                Configurações
+                            </span>
+
+                            <SidebarLink
+                                    href="/dashboard/profile"
+                                    label="Meu Perfil"
+                                    pathname={pathname}
+                                    isCollapsed={isCollapsed}
+                                    icon={<CircleUserIcon className="w-6 h-6" />}
+                            />
+
+                            <SidebarLink
+                                href="/dashboard/plans"
+                                label="Planos"
+                                pathname={pathname}
+                                isCollapsed={isCollapsed}
+                                icon={<Banknote />}
+                            />
+                        </nav>
+                    </CollapsibleContent>
+                </Collapsible>
             </aside>
             
             <div className={clsx("flex flex-1 flex-col transition-all duration-300", {
@@ -81,8 +162,8 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }){
                             </h1>
                         </div>
 
-                        <SheetContent side="right" className="sm:max-w-xs text-black">
-                            <SheetTitle>OdontoPRO</SheetTitle>
+                        <SheetContent side="right" className="sm:max-w-xs text-black px-4 py-4">
+                            <SheetTitle className="font-bold">OdontoPRO</SheetTitle>
                             <SheetDescription>Menu Administrativo</SheetDescription>
                             
                             <nav className="grid gap-2 text-base pt-5">
