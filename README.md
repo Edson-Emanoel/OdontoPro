@@ -15,6 +15,10 @@ npx shadcn@latest add sheet
 npx shadcn@latest add button
 npx shadcn@latest add card
 npx shadcn@latest add collapsible
+npx shadcn@latest add form
+npx shadcn@latest add input
+npx shadcn@latest add select
+npx shadcn@latest add dialog
 
 npm install prisma --save-dev
 npx prisma init
@@ -26,3 +30,5 @@ npx prisma migrate dev(obrigatório após alguma alteração no 'schema.prisma')
 npm install next-auth@beta
 npx auth secret(gera uma senha, no '.env.local', e pode ser gerada varias vezes)
 npm install @auth/prisma-adapter
+
+npm install sonner
