@@ -6,21 +6,19 @@ import Image from "next/image"
 import React, { useState } from "react"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import logoImg from "../../../../../public/logo.png"
 import { ArrowLeft, ArrowRight, Banknote, CalendarCheck2, CircleUserIcon, Folder, List } from "lucide-react"
 import {
   Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
+  CollapsibleContent
 } from "@/components/ui/collapsible"
 import {
   Sheet,
   SheetContent,
   SheetDescription,
-  SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import logoImg from "../../../../../public/logo.png"
 
 export function SidebarDashboard({ children }: { children: React.ReactNode }){
 
@@ -152,7 +150,12 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }){
                     <Sheet>
                         <div className="gap-4 flex items-center">
                             <SheetTrigger asChild>
-                                <Button variant={"outline"} size={"icon"} className="md:hidden">
+                                <Button
+                                    size={"icon"}
+                                    variant={"outline"}
+                                    className="md:hidden"
+                                    onClick={() => setIsCollapsed(false)}
+                                >
                                     <List className="w-5 h-5" />
                                 </Button>
                             </SheetTrigger>
