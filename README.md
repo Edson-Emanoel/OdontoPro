@@ -1,3 +1,5 @@
+**Aula Atual- 39(Começo)**
+
 - Usa o NextJS(Framework)
 - Usa o Shadcn/Ui(Componentes Visuais)
 - Usa o TailwindCss(Estilização)
