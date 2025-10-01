@@ -8,7 +8,7 @@
  * @returns {number} - o Valor convertido em centavos
  * 
  * @example
- * convertRealToCents
+ * convertRealToCents("1.300,50"); // Retorna: 123456
  * 
 */
 export function convertRealToCents(amount: string){

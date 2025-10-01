@@ -1,23 +1,56 @@
 "use client"
 
+import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { convertRealToCents } from "@/utils/convertCurrency"
+import { createNewService } from "../_actions/create-service"
 import { DialogServiceFormData, UseDialogServiceForm } from "./dialog-service-form"
 import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Button } from "@/components/ui/button"
-import { convertRealToCents } from "@/utils/convertCurrency"
+import { useState } from "react"
 
-export function DialogService(){
+interface DialogServiceProps {
+    closeModal: () => void;
+}
+
+export function DialogService({ closeModal }: DialogServiceProps){
 
     const form = UseDialogServiceForm()
+    const [loading, setLoading] = useState(false); 
 
     async function onSubmit(values: DialogServiceFormData) {
-
+        setLoading(true)
         const priceInCents = convertRealToCents(values.price)
+        const hours = parseInt(values.hours) || 0
+        const minutes = parseInt(values.minutes) || 0
 
-        console.log(priceInCents);
+        // Converte as horas e minutos para duração total em minutos;
+        const duration = (hours * 60) + minutes;
+
+        const response = await createNewService({
+            name: values.name,
+            price: priceInCents,
+            duration: duration
+        })
+        
+        setLoading(false);
+
+
+        if(response.error){
+            toast.error("Erro ao Cadastrar o Serviço")
+            return;
+        }
+
+        toast.success("Serviço Cadastrado com Sucesso!")
+        handleClose();
+
     }
 
+    function handleClose(){
+        form.reset();
+        closeModal();
+    }
 
     function changeCurrency(event: React.ChangeEvent<HTMLInputElement>){
         let { value } = event.target;
@@ -132,8 +165,12 @@ export function DialogService(){
                         </div>
                     </div>
 
-                    <Button type="submit" className="w-full font-semibold text-white">
-                        Adicionar Serviço
+                    <Button
+                        type="submit"
+                        className="w-full font-semibold text-white"
+                        disabled={loading}
+                    >
+                        {loading ? "Cadastrando..." : "Adicionar Serviço"}
                     </Button>
 
                 </form>
