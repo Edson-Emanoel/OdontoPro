@@ -1,7 +1,10 @@
 "use client"
 
+// Valor em centavos = valor em reais * 100
+// Valor em reais = valor em centavos / 100
+
 import { Input } from "@/components/ui/input"
-import { UseDialogServiceForm } from "./dialog-service-form"
+import { DialogServiceFormData, UseDialogServiceForm } from "./dialog-service-form"
 import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
@@ -9,6 +12,26 @@ import { Button } from "@/components/ui/button"
 export function DialogService(){
 
     const form = UseDialogServiceForm()
+
+    async function onSubmit(values: DialogServiceFormData) {
+        console.log(values);
+    }
+
+
+    function changeCurrency(event: React.ChangeEvent<HTMLInputElement>){
+        let { value } = event.target;
+        value = value.replace(/\D/g, '');
+
+        if(value){
+            value = (parseInt(value, 10) / 100).toFixed(2);
+            value = value.replace('.', ',')
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+        }
+
+        event.target.value = value;
+        form.setValue("price", value)
+        
+    }
 
     return(
         <>
@@ -20,7 +43,10 @@ export function DialogService(){
             </DialogHeader>
 
             <Form {...form}>
-                <form>
+                <form
+                    className="space-y-2"
+                    onSubmit={form.handleSubmit(onSubmit)}
+                >
                     <div className="flex flex-col">
                         <FormField
                             control={form.control}
@@ -50,6 +76,7 @@ export function DialogService(){
                                         <Input
                                             {...field}
                                             placeholder="Ex: 120,00"
+                                            onChange={changeCurrency}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -83,7 +110,7 @@ export function DialogService(){
 
                             <FormField
                                 control={form.control}
-                                name="price"
+                                name="minutes"
                                 render={({ field }) => (
                                     <FormItem className="my-2">
                                         <FormLabel className="font-semibold">
