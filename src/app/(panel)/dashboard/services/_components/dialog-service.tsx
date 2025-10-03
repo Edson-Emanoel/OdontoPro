@@ -9,6 +9,7 @@ import { DialogServiceFormData, UseDialogServiceForm } from "./dialog-service-fo
 import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 interface DialogServiceProps {
     closeModal: () => void;
@@ -18,6 +19,7 @@ export function DialogService({ closeModal }: DialogServiceProps){
 
     const form = UseDialogServiceForm()
     const [loading, setLoading] = useState(false); 
+    const router = useRouter()
 
     async function onSubmit(values: DialogServiceFormData) {
         setLoading(true)
@@ -42,8 +44,9 @@ export function DialogService({ closeModal }: DialogServiceProps){
             return;
         }
 
-        toast.success("Serviço Cadastrado com Sucesso!")
+        toast.success("Serviço Cadastrado com Sucesso!");
         handleClose();
+        router.refresh();
 
     }
 

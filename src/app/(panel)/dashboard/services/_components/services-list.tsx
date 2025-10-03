@@ -4,22 +4,16 @@ import { useState } from "react"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import {
   Card,
-  CardAction,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Pen, Pencil, Plus, X } from "lucide-react"
+import { Pencil, Plus, X } from "lucide-react"
 import { DialogService } from "./dialog-service"
 import { Service } from "@/generated/prisma"
 import { formatCurrency } from "@/utils/formatCurrency"
@@ -29,7 +23,6 @@ interface ServicesListProps {
 }
 
 export function ServicesList({ services }: ServicesListProps){
-    
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     return(

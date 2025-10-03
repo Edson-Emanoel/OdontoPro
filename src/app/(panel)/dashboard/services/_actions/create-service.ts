@@ -3,6 +3,7 @@
 import { z } from "zod"
 import { auth } from "@/lib/auth"
 import prisma from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
 
 const formSchema = z.object({
     name: z.string().min(1, { message: "O Nome do Seriviço é Obrigatório" }),
@@ -39,6 +40,8 @@ export async function createNewService(formData: FromSchema){
                 userId: session?.user?.id
             }
         })
+
+        revalidatePath("/dashboard/services")
 
         return {
             data: newService
