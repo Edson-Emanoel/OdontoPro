@@ -6,19 +6,17 @@ import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 
 const formSchema = z.object({
-    name: z.string().min(1, { message: "O Nome do Seriviço é Obrigatório" }),
-    price: z.number().min(1, { message: "O Preço do Seriviço é Obrigatório" }),
-    duration: z.number ()
+    serviceId: z.string().min(1, "O ID do serviço é obrigatório")
 })
 
 type FromSchema = z.infer<typeof formSchema>
 
-export async function createNewService(formData: FromSchema){
+export async function deleteService(formData: FromSchema){
     const session = await auth();
 
     if(!session?.user?.id){
         return {
-            error: "Falha ao cadastrar o serviço",
+            error: "Falha ao deletar o serviço",
         }
     }
 
@@ -29,28 +27,30 @@ export async function createNewService(formData: FromSchema){
             error: schema.error.issues[0].message,
         }
     }
-    
+
     try {
         
-        const newService = await prisma.service.create({
+        // 1 - Deletar Item do Banco
+        await prisma.service.update({
+            where: {
+                id: formData.serviceId,
+                userId: session?.user?.id,
+            },
             data: {
-                name: formData.name,
-                price: formData.price,
-                duration: formData.duration,
-                userId: session?.user?.id
+                status: false
             }
         })
 
         revalidatePath("/dashboard/services")
 
         return {
-            data: newService
+            data: "Serviço deletado com sucesso!"
         }
 
     } catch (err) {
-        console.log(err);
+        // console.log(err);
         return {
-            error: "Falha ao Cadastrar o Serviço"
+            error: "Falha ao deletar o serviço",
         }
     }
 }
