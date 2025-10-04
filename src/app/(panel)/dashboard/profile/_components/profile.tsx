@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -17,6 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import { signOut, useSession } from "next-auth/react";
 
 type UserWithSubscription = Prisma.UserGetPayload<{
     include: {
@@ -31,6 +33,8 @@ interface ProfileContentProps {
 export function ProfileContent({ user }: ProfileContentProps){    
     const [selectedHours, setSelectedHours] = useState<string[]>(user.times ?? []);
     const [dialogIsOpen, setDialogIsOpen] = useState(false)
+    const { update } = useSession();
+    const router = useRouter();
 
     const form = useProfileForm({
         name: user.name,
@@ -89,6 +93,12 @@ export function ProfileContent({ user }: ProfileContentProps){
         }
         
         toast.success("Clinica Atualizada com Sucesso")
+    }
+
+    async function handleLogOut() {
+        await signOut();
+        await update();
+        router.replace("/")
     }
 
     return(
@@ -274,6 +284,15 @@ export function ProfileContent({ user }: ProfileContentProps){
                     </Card>
                 </form>
             </Form>
+
+            <section className="mt-4">
+                <Button
+                    variant="destructive"
+                    onClick={handleLogOut}
+                >
+                    Sair da Conta
+                </Button>
+            </section>
         </div>
     )
 }
