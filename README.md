@@ -1,4 +1,4 @@
-**Aula Atual - 47(Começo)**
+**Aula Atual - 50(Começo)**
 
 - Usa o NextJS(Framework)
 - Usa o Shadcn/Ui(Componentes Visuais)

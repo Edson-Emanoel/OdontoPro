@@ -10,6 +10,7 @@ import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/di
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { updateService } from "../_actions/update-service"
 
 interface DialogServiceProps {
     closeModal: () => void;
@@ -37,6 +38,17 @@ export function DialogService({ closeModal, serviceId, initialValues }: DialogSe
         // Converte as horas e minutos para duração total em minutos;
         const duration = (hours * 60) + minutes;
 
+        if(serviceId){
+            await handleEditServiceById({
+                serviceId: serviceId,
+                name: values.name,
+                priceInCents: priceInCents,
+                duration: duration
+            })
+
+            return;
+        }
+
         const response = await createNewService({
             name: values.name,
             price: priceInCents,
@@ -55,6 +67,36 @@ export function DialogService({ closeModal, serviceId, initialValues }: DialogSe
         handleClose();
         router.refresh();
 
+    }
+
+    async function handleEditServiceById({
+        serviceId,
+        name,
+        priceInCents,
+        duration } : {
+            serviceId: string;
+            name: string;
+            priceInCents: number;
+            duration: number;
+    }) {
+        
+        const response = await updateService({
+            serviceId: serviceId,
+            name: name,
+            price: priceInCents,
+            duration: duration,
+        })
+
+        setLoading(false)
+
+        if(response?.error){
+            toast.error(response.error)
+            return;
+        }
+
+        toast.success("Serviço Atualizado com Sucesso!")
+
+        handleClose()
     }
 
     function handleClose(){
@@ -180,7 +222,7 @@ export function DialogService({ closeModal, serviceId, initialValues }: DialogSe
                         className="w-full font-semibold text-white"
                         disabled={loading}
                     >
-                        {loading ? "Cadastrando..." : "Adicionar Serviço"}
+                        {loading ? "Cadastrando..." : serviceId ? "Atualizar Serviço" : "Adicionar Serviço"}
                     </Button>
 
                 </form>
