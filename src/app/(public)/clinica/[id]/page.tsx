@@ -5,10 +5,7 @@ import { ScheduleContent } from "./_components/schedule-content"
 export default async function SchedulePage({
     params,
 }: {
-    params:
-        Promise<{
-            id: string
-        }>
+    params: Promise<{ id: string }>
 }){
 
     const userId = (await params).id
@@ -19,6 +16,6 @@ export default async function SchedulePage({
     }
 
     return(
-       <ScheduleContent />
+       <ScheduleContent clinic={user} />
     )
 }

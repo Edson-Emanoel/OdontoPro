@@ -1,6 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+"use client"
+
 import z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const formSchema = z.object({
     name: z.string().min(1, { message: "O nome do serviço é obrigatório." }),
