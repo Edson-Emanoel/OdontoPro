@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { useAppointmentForm } from "./schedule-form"
 import { formatPhone } from "@/utils/formatPhone"
 import { DateTimePicker } from "./date-picker"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 type UserWithServiceAndSubscription = Prisma.UserGetPayload<{
     include: {
@@ -56,7 +57,10 @@ export function ScheduleContent({ clinic }: ScheduleContentProps){
                 {/* Form */}
                 <Form {...form}>
                     <form className="space-y-6 bg-white p-6 border rounded-md shadow-sm mx-2">
-                        <FormField control={form.control} name="name" render={({ field }) => (
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
                             <FormItem className="my-3">
                                 <FormLabel className="font-semibold">Nome Completo:</FormLabel>
                                 <FormControl>
@@ -70,7 +74,10 @@ export function ScheduleContent({ clinic }: ScheduleContentProps){
                             </FormItem>
                         )} />
 
-                        <FormField control={form.control} name="email" render={({ field }) => (
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
                             <FormItem className="my-3">
                                 <FormLabel className="font-semibold">Email:</FormLabel>
                                 <FormControl>
@@ -84,7 +91,10 @@ export function ScheduleContent({ clinic }: ScheduleContentProps){
                             </FormItem>
                         )} />
 
-                        <FormField control={form.control} name="phone" render={({ field }) => (
+                        <FormField
+                            control={form.control}
+                            name="phone"
+                            render={({ field }) => (
                             <FormItem className="my-3">
                                 <FormLabel className="font-semibold">Telefone:</FormLabel>
                                 <FormControl>
@@ -102,19 +112,25 @@ export function ScheduleContent({ clinic }: ScheduleContentProps){
                             </FormItem>
                         )} />
 
-                        <FormField control={form.control} name="date" render={({ field }) => (
-                            <FormItem className="flex items-center gap-2 space-y-1">
-                                <FormLabel className="font-semibold">Data do Agendamento:</FormLabel>
-                                <FormControl>
-                                    <DateTimePicker
-                                        initialDate={new Date()}
-                                        className="w-full rounded border p-2"
-                                        onChange={(date) => {
-                                            if(date){
-                                                field.onChange(date)
-                                            }
-                                        }}
-                                    />
+                        <FormField
+                            control={form.control}
+                            name="serviceId"
+                            render={({ field }) => (
+                            <FormItem className="">
+                                <FormLabel className="font-semibold">Selecione o Serviço:</FormLabel>
+                                <FormControl className="w-full">
+                                    <Select onOpenChange={field.onChange}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Selecione um Serviço" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {clinic.services.map((service) => (
+                                                <SelectItem key={service.id} value={service.id}>
+                                                    {service.name} - {Math.floor(service.duration / 60)}h {service.duration % 60}min
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
