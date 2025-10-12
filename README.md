@@ -1,4 +1,4 @@
-**Aula Atual - 54(Começo)**
+**Aula Atual - 55(Começo)**
 
 - Usa o NextJS(Framework)
 - Usa o Shadcn/Ui(Componentes Visuais)
@@ -34,3 +34,7 @@ npx auth secret(gera uma senha, no '.env.local', e pode ser gerada varias vezes)
 npm install @auth/prisma-adapter
 
 npm install sonner
+
+npm install react-datepicker --save
+
+npm i date-fns --save

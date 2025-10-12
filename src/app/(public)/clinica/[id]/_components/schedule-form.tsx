@@ -4,14 +4,6 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod";
 
-// interface useAppointmentFormProps {
-//     name: string | null;
-//     address: string | null;
-//     phone: string | null;
-//     status: boolean;
-//     timeZone: string | null;
-// }
-
 const appointmentSchema = z.object({
     name: z.string().min(1, { message: "O Nome é Obrigatório" }),
     email: z.string().email("O Email é Obrigatório"),
@@ -22,14 +14,15 @@ const appointmentSchema = z.object({
 
 export type AppointmentFormData = z.infer<typeof appointmentSchema>
 
-export function useAppointmentForm(){
+export function useAppointmentForm(){   
     return useForm<AppointmentFormData>({
         resolver: zodResolver(appointmentSchema),
         defaultValues: {
             name: "",
             email: "",
             phone: "",
+            serviceId: "",
             date: new Date()
         }
     })
-}
+}   
