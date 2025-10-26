@@ -3,13 +3,14 @@
 import Image from "next/image"
 import { MapPin } from "lucide-react"
 import { Prisma } from "@/generated/prisma"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { formatPhone } from "@/utils/formatPhone"
+import { AppointmentFormData, useAppointmentForm } from "./schedule-form"
 import imgTest from "../../../../../../public/image.png"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { useAppointmentForm } from "./schedule-form"
-import { formatPhone } from "@/utils/formatPhone"
-import { DateTimePicker } from "./date-picker"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { DateTimePicker } from "./date-picker"
 
 type UserWithServiceAndSubscription = Prisma.UserGetPayload<{
     include: {
@@ -25,6 +26,12 @@ interface ScheduleContentProps {
 export function ScheduleContent({ clinic }: ScheduleContentProps){
 
     const form = useAppointmentForm()
+
+    const { watch } = form;
+
+    async function handleRegisterAppointment(formData: AppointmentFormData) {
+        console.log(formData);
+    }
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -56,7 +63,10 @@ export function ScheduleContent({ clinic }: ScheduleContentProps){
             <section className="max-w-2xl mx-auto w-full mt-6">
                 {/* Form */}
                 <Form {...form}>
-                    <form className="space-y-6 bg-white p-6 border rounded-md shadow-sm mx-2">
+                    <form
+                        onSubmit={form.handleSubmit(handleRegisterAppointment)}
+                        className="space-y-6 bg-white p-6 border rounded-md shadow-sm mx-2"
+                    >
                         <FormField
                             control={form.control}
                             name="name"
@@ -114,9 +124,30 @@ export function ScheduleContent({ clinic }: ScheduleContentProps){
 
                         <FormField
                             control={form.control}
+                            name="date"
+                            render={({ field }) => (
+                            <FormItem className="flex items-center gap-2 space-y-1 my-3">
+                                <FormLabel className="font-semibold">Data do Agendamento:</FormLabel>
+                                <FormControl>
+                                   <DateTimePicker
+                                    initialDate={new Date()}
+                                    className="w-full rounded border p-2"
+                                    onChange={(date) => {
+                                        if(date){
+                                            field.onChange(date)
+                                        }
+                                    }}
+                                />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )} />
+
+                        <FormField
+                            control={form.control}
                             name="serviceId"
                             render={({ field }) => (
-                            <FormItem className="">
+                            <FormItem className="my-3">
                                 <FormLabel className="font-semibold">Selecione o Serviço:</FormLabel>
                                 <FormControl className="w-full">
                                     <Select onOpenChange={field.onChange}>
@@ -135,6 +166,21 @@ export function ScheduleContent({ clinic }: ScheduleContentProps){
                                 <FormMessage />
                             </FormItem>
                         )} />
+
+                        {clinic.status ? (
+                            <Button
+                                type="submit"
+                                className="w-full bg-emerald-500 hover:bg-emerald-400"
+                                disabled={!watch("name") || !watch("email") || !watch("phone") || !watch("date")}
+                            >
+                                Realizar Agendamento
+                            </Button>
+                        ) : (
+                            <p className="bg-red-500 text-white text-center px-4 py-2 rounded-md">
+                                A Clinica está fechada no momento.
+                            </p>
+                        )}
+
                     </form>
                 </Form>
             </section>
